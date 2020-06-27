@@ -4,6 +4,40 @@ A Clojure library for various bits and bobs that I've written and ideas I've
 played with. This isn't necessarily meant to be used in other projects, but
 should be considered more of a sandbox.
 
+## `cond-some-as`
+
+A macro that binds a truthy test result to a specified symbol for use in the
+matching expr.
+
+Usage:
+
+```clojure
+    (cond-some-as sym
+      test expr
+      [test expr
+       ...]
+      [default])
+```
+
+Example:
+
+```clojure
+(cond-some-as $
+  (re-find #"Mr\\. (.*)" full-name) (second $)
+  (not-empty full-name)             $
+  "John Doe")
+```
+
+The above is equivalent to:
+
+```clojure
+(if-let [$ (re-find #"Mr\\. (.*)" full-name)]
+  (second $)
+  (if-let [$ (not-empty full-name)]
+    $
+    "John Doe"))
+```
+
 ## License
 
 Copyright © 2020 Walter Leibbrandt <https://github.com/walterl>
